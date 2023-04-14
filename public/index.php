@@ -16,7 +16,9 @@ $router = new Router();
 //add the routes
 $router->add('',['controller'=>'Home','action'=>'index']);
 $router->add('posts',['controller'=>'Posts','action'=>'index']);
-$router->add('posts/new',['controller'=>'Posts','action'=>'new']);
+//$router->add('posts/new',['controller'=>'Posts','action'=>'new']);
+$router->add('{controller}/{action}',[]);//notice here the second parameter is not left out but is declared as an empty array
+$router->add('admin/{action}/{controller}',[]);
 
 //Display the routing table
 //echo '<pre>';

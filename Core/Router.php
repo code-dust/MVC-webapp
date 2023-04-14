@@ -18,7 +18,19 @@ protected $params = [];
 	
 	
 public function add($route, $params){
+	//$this->routes[$route] = $params;
+	
+	//convert the route to a regular expression: escape forward slashes
+	$route = preg_replace('/\//', '\\/', $route);
+	
+	//convert variables e.g {controller}
+	$route = preg_replace('/\{([a-z]+)\}/', '(?P<\1>[a-z-]+)', $route);
+	
+	//Add start and end dilimiters,  and case insensitive flag
+	$route = '/^' . $route . '$/i';
+	
 	$this->routes[$route] = $params;
+	
 }
 	
 	
@@ -34,13 +46,37 @@ public function getRoutes(){
 //@return boolean true if a match is found, false otherwise
 public function match($url)
 {
-	foreach ($this->routes as $route => $params){
+	/*foreach ($this->routes as $route => $params){
 		if ($url == $route){
 			$this->params = $params;
 			return true;
 		}
 	}
 	return false;
+	*/
+	
+	
+	
+	//Match to the fixed URL format : controller/action
+	//$reg_exp = "/^(?P<controller>[a-z]+)\/(?P<action>[a-z]+)$/";
+	
+	foreach ($this->routes as $route => $params){
+			if (preg_match($route,$url,$matches)){
+		       //Get named capture group values
+		       //$params = [];
+		       echo $route;
+		       foreach ($matches as $key => $match){
+			       if (is_string($key)){
+				       $params[$key] = $match;
+			       }
+		       }
+		
+		       $this->params = $params;
+		       return true;//allows it exit this block of code as soons as the url matches a rregular expression out of a list of regular expressions
+	     }
+
+	}
+	return false;    
 }
 
 	
