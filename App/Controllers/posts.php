@@ -1,4 +1,6 @@
 <?php
+namespace App\Controllers;
+
 //Posts Controller
 //PHP version 5.4
 
